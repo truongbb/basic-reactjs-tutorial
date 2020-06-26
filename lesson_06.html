@@ -1,0 +1,200 @@
+<!-- REACT JS CLASS COMPONENT-->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<div id='root-1'></div>
+
+<script type="text/babel">
+  class DemoButtonClick1 extends React.Component {
+    constructor(...args) {
+      super(args);
+      this.state = {
+        count: 0
+      }
+    }
+
+    handleClick() {
+      this.setState({ count: this.state.count + 1 });
+    }
+
+    render() {
+      return (
+        <div>
+          <label>root-1</label>
+          <button onClick={this.handleClick}>{this.state.count}</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<DemoButtonClick1 />, document.getElementById('root-1'));
+</script>
+<!-- Nhìn có vẻ rất đơn giản và đúng nhưng đoạn code trên khi chạy sẽ bị lỗi ở hàm onClick của button onClick={this.handleClick} -->
+
+
+<!-- Nhắc lại một chút kiến thức về JS core -->
+<script>
+  // Khai báo một object
+  const bob = {
+    name: 'Bob',
+    greeting(name) {
+      return `Hello ${name}, my name is ${this.name}`;
+    }
+  }
+
+  // Thực hiện dòng lệnh sau
+  console.log(bob.greeting('Anne'));
+  // Output sẽ là: Hi Anne, my name is Bob; rất ok
+
+  // giả sử ta gán
+  const greetingFunction = bob.greeting;
+  // và in ra
+  console.log(greetingFunction('Anne'));
+  // Output sẽ là: Hi Anne, my name is ; không OK chút nào, ta bị mất mất tên của object bob do chỉ gán hàm greeting
+
+  // cách khắc phục như sau, khi gán ta bind cả object bob vào thì sẽ giữ nguyên được các giá trị của nó
+  const greetingFn = bob.greeting.bind(bob);
+
+  // giờ in ra sẽ rất ok thôi
+  console.log(greetingFn('Anne'));
+</script>
+
+
+
+
+<!-- ÁP dụng các kiến thức trên vào đoạn code React, ta cần bind cả class vào, tức là bind this -->
+<div id='root-2'></div>
+
+<script type="text/babel">
+  class DemoButtonClick2 extends React.Component {
+    constructor(...args) {
+      super(args);
+      this.state = {
+        count: 0
+      }
+    }
+
+    handleClick() {
+      this.setState({ count: this.state.count + 1 });
+    }
+
+    render() {
+      return (
+        <div>
+          <label>root-2</label>
+          <button onClick={this.handleClick.bind(this)}>{this.state.count}</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<DemoButtonClick2 />, document.getElementById('root-2'));
+</script>
+
+
+
+<!-- Chúng ta có thể thực hiện bind trong constructor -->
+<div id='root-3'></div>
+
+<script type="text/babel">
+  class DemoButtonClick3 extends React.Component {
+    constructor(...args) {
+      super(args);
+      this.state = {
+        count: 0
+      }
+      this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+      this.setState({ count: this.state.count + 1 });
+    }
+
+    render() {
+      return (
+        <div>
+          <label>root-3</label>
+          <button onClick={this.handleClick}>{this.state.count}</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<DemoButtonClick3 />, document.getElementById('root-3'));
+</script>
+
+
+
+<!-- Bỏ constructor đi và bind bên ngoài cũng ok -->
+<div id='root-4'></div>
+
+<script type="text/babel">
+  class DemoButtonClick4 extends React.Component {
+    state = {
+      count: 0
+    }
+    handleClick = this.handleClick.bind(this);
+    handleClick() {
+      this.setState({ count: this.state.count + 1 });
+    }
+
+    render() {
+      return (
+        <div>
+          <label>root-4</label>
+          <button onClick={this.handleClick}>{this.state.count}</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<DemoButtonClick4 />, document.getElementById('root-4'));
+</script>
+
+
+<!-- Cách khác là chuyển handleClick thành function và bind -->
+<div id='root-5'></div>
+
+<script type="text/babel">
+  class DemoButtonClick5 extends React.Component {
+    state = {
+      count: 0
+    }
+    handleClick = function () {
+      this.setState({ count: this.state.count + 1 });
+    }.bind(this)
+
+    render() {
+      return (
+        <div>
+          <label>root-5</label>
+          <button onClick={this.handleClick}>{this.state.count}</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<DemoButtonClick5 />, document.getElementById('root-5'));
+</script>
+
+
+
+<!-- Cách hay hơn cả là dùng arrow function -->
+<div id='root-6'></div>
+
+<script type="text/babel">
+  class DemoButtonClick6 extends React.Component {
+    state = {
+      count: 0
+    }
+    handleClick = () => {
+      this.setState({ count: this.state.count + 1 });
+    }
+
+    render() {
+      return (
+        <div>
+          <label>root-6</label>
+          <button onClick={this.handleClick}>{this.state.count}</button>
+        </div>
+      );
+    }
+  }
+  ReactDOM.render(<DemoButtonClick6 />, document.getElementById('root-6'));
+</script>

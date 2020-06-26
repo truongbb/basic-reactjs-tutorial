@@ -1,0 +1,136 @@
+<!-- REACT JS COMPONENT -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<style>
+  .box {
+    border: 1px solid black;
+  }
+
+  .box-small {
+    width: 50px;
+    height: 80px;
+  }
+</style>
+
+
+
+
+<div id='root-1'></div>
+<script type='text/babel'>
+  const rootElement1 = document.getElementById('root-1');
+  const element1 = (<div>
+    <div className='box box-small' style={{ paddingLeft: '20px' }}>box</div>
+  </div>
+  );
+
+  ReactDOM.render(element1, rootElement1);
+</script>
+<!-- Tại sao phải viết style={{}} trong thẻ div
+Tại vì đó là 1 props của React element, phải truyền vào một object và destructure nó, tức là cần có 2 cặp ngoặc nhọn
+Cách viết này tương đương với cách viết dưới đây
+-->
+<br />
+
+<div id='root-2'></div>
+<script type='text/babel'>
+  const rootElement2 = document.getElementById('root-2');
+  const props = {
+    className: 'box box-small',
+    style: {
+      paddingLeft: '20px'
+    }
+  }
+  const element2 = (<div>
+    <div {...props}>box</div>
+  </div>
+  );
+
+  ReactDOM.render(element2, rootElement2);
+</script>
+<!-- Việc dùng từ khóa className thay vì viết thẳng là class là do từ khóa class trùng với từ khóa của HTML
+và việc đó sẽ dẫn đến confuse, gây nhầm lẫn. Vậy nên phải tách biệt nó ra -->
+
+
+
+<!-- Viết một cách 'Reacter' nhé, nhưng style in-line sẽ ghi đè lên style của thẻ được return ở hàm -->
+<br />
+<div id='root-3'></div>
+<script type='text/babel'>
+  const Box = props => {
+    return (
+      <div>
+        <div className='box box-small'
+          style={{ paddingLeft: '20' }}
+          {...props} />
+      </div>
+    );
+  }
+  const element3 = (
+    <Box style={{ backgroundColor: 'lightblue' }}>small box</Box>
+  );
+  ReactDOM.render(element3, document.getElementById('root-3'));
+</script>
+
+
+<!-- Khắc phục vấn đề này ta sử dụng destructuring -->
+<br />
+<div id='root-4'></div>
+<script type='text/babel'>
+  const Box = ({ style, ...restProps }) => {
+    return (
+      <div>
+        <div className='box box-small'
+          style={{ paddingLeft: '20', ...style }}
+          {...restProps} />
+      </div>
+    );
+  }
+  const element4 = (
+    <Box style={{ backgroundColor: 'lightblue' }}>small box</Box>
+  );
+  ReactDOM.render(element4, document.getElementById('root-4'));
+</script>
+
+
+<!-- Làm tương tự với className -->
+<br />
+<div id='root-5'></div>
+<script type='text/babel'>
+  const Box = ({ style, className, ...restProps }) => {
+    return (
+      <div>
+        <div className={`box ${className}`}
+          style={{ paddingLeft: '20', ...style }}
+          {...restProps} />
+      </div>
+    );
+  }
+  const element5 = (
+    <Box className='small-box' style={{ backgroundColor: 'lightblue' }}>small box</Box>
+  );
+  ReactDOM.render(element4, document.getElementById('root-5'));
+</script>
+
+
+
+<!-- Trong trường hợp className không được gán giá trị ở element thì trong hàm Box nó sẽ là undefined
+Khắc phục vấn đề này bằng cách sử dụng defaulf value -->
+<br />
+<div id='root-5'></div>
+<script type='text/babel'>
+  const Box = ({ style, className = '', ...restProps }) => {
+    return (
+      <div>
+        <div className={`box ${className}`}
+          style={{ paddingLeft: '20', ...style }}
+          {...restProps} />
+      </div>
+    );
+  }
+  const element5 = (
+    <Box style={{ backgroundColor: 'lightblue' }}>small box</Box>
+  );
+  ReactDOM.render(element4, document.getElementById('root-5'));
+</script>

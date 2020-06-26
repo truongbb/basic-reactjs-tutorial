@@ -1,0 +1,94 @@
+<!-- REACT JS FORM -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<div id='root'></div>
+
+<script type="text/babel">
+  class FormDemo extends React.Component {
+    static availableOptions = [
+      'apple',
+      'grape',
+      'cherry',
+      'orange',
+      'pear',
+      'peach'
+    ];
+
+    state = {
+      commaSeparate: '',
+      multipleValue: '',
+      multipleSelect: []
+    }
+
+    commaSeparateChange = event => {
+      const { value } = event.target;
+      const allVals = value.trim().split(',').map(v => v.trim()).filter(Boolean);
+      this.setState({
+        commaSeparate: value,
+        multipleValue: allVals.join('\n'),
+        multipleSelect: allVals.filter(v => FormDemo.availableOptions.includes(v))
+      })
+    }
+
+    multipleValueChange = event => {
+      const { value } = event.target;
+      const allVals = value.trim().split('\n').map(v => v.trim()).filter(Boolean);
+      this.setState({
+        commaSeparate: allVals.join(','),
+        multipleValue: value,
+        multipleSelect: allVals.filter(v => FormDemo.availableOptions.includes(v))
+      })
+    }
+
+    multipleSelectChange = event => {
+      const allVals = Array.from(event.target.selectedOptions).map(o => o.value);
+      this.setState({
+        commaSeparate: allVals.join(','),
+        multipleValue: allVals.join('\n'),
+        multipleSelect: allVals
+      })
+    }
+
+
+    render() {
+      const { commaSeparate, multipleValue, multipleSelect } = this.state;
+      return (
+        <form>
+          <label>
+            Comma separated values:
+                        <br />
+            <input name='commaSeparate' value={commaSeparate} onChange={this.commaSeparateChange} />
+          </label>
+          <br />
+          <br />
+          <label>
+            Multiple line values:
+                        <br />
+            <textarea name='multipleValues' value={multipleValue} onChange={this.multipleValueChange}
+              rows={FormDemo.availableOptions.length}
+            />
+          </label>
+          <br />
+          <br />
+          <label>
+            Multiple line values:
+                        <br />
+            <select multiple={true} name='multipleSelect' value={multipleSelect} size={FormDemo.availableOptions.length}
+              onChange={this.multipleSelectChange}>
+              {
+                FormDemo.availableOptions.map(optionValue => (
+                  <option key={optionValue} value={optionValue}>{optionValue}</option>
+                ))
+              }
+            </select>
+          </label>
+        </form>
+      );
+    }
+  }
+  ReactDOM.render(
+    <FormDemo />, document.getElementById('root')
+  );
+</script>

@@ -1,0 +1,58 @@
+<!-- REACT JS EVENT HANDLER-->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<div id='root'></div>
+
+<script type="text/babel">
+  class TimerApp extends React.Component {
+
+    state = {
+      time: 0,
+      running: false
+    }
+
+    handleRunClick = () => {
+      this.setState(state => {
+        if (state.running) {
+          clearInterval(this.timer);
+        } else {
+          const startTime = Date.now() - this.state.time;
+          this.timer = setInterval(() => {
+            this.setState({ time: Date.now() - startTime })
+          });
+        }
+        return { running: !state.running };
+      });
+    }
+
+    handleClear = () => {
+      clearInterval(this.timer);
+      this.setState({ time: 0, running: false })
+    }
+
+    render() {
+      const buttonStyle = {
+        fontSize: '2em',
+        backgroundColor: 'white',
+        border: '1px solid gray',
+        borderRadius: '10px',
+        width: '5em',
+        height: '2em'
+      }
+      return (
+        <div style={{ textAlign: 'center', marginTop: '15%' }}>
+          <label style={{ fontSize: '5em' }}>{this.state.time} ms</label>
+          <br />
+          <button style={buttonStyle} onClick={this.handleRunClick}>{this.state.running === false ? 'Start' : 'Stop'}</button>
+          <br />
+          <br />
+          <button style={buttonStyle} onClick={this.handleClear}>Clear</button>
+        </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<TimerApp />, document.getElementById('root'));
+</script>

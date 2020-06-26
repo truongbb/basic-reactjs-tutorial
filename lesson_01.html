@@ -1,0 +1,64 @@
+<!-- REACTJS RENDER ELEMENT -->
+
+
+<!-- 1 - Khi sử dụng JS thông thường -->
+<div id='root-1'></div>
+<script type='text/javascript'>
+  const root1Element = document.getElementById('root-1');
+  const element = document.createElement('div');
+  element.textContent = 'Hello World';
+  element.className = 'container';
+  root1Element.appendChild(element);
+</script>
+
+
+<!-- 2 - Khi sử dụng reactjs createElement và render-->
+<div id='root-2'></div>
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script type="text/javascript">
+  const root2Element = document.getElementById('root-2');
+  const reactElement = React.createElement('div', { className: 'container' }, 'Hello World by Reactjs');
+  // hàm createElement này có các tham số truyền vào rất linh động, ta có thể truyền thêm contentText như sau:
+  const reactElement2 = React.createElement('div', { className: 'container' }, 'Hello World by Reactjs', 'ABCXYZ'); // có thể có thêm nhiều tham số đằng sau nữa
+  // hoặc có thể viết gọn trong object như sau (tại sao lại dùng mảng tên là children thì console.log ra cái element là biết):
+  console.log(reactElement2);
+  const reactElement3 = React.createElement('div', { className: 'container', children: ['Hello World by Reactjs', 'ABCXYZ'] });
+  ReactDOM.render(reactElement3, root2Element); // render reactElement vào rootElement
+
+    // object chứa className và children của reactElement3 kia được gọi là props của element
+</script>
+
+
+
+<!-- 3 - Khi sử dụng JSX -->
+<div id='root-3'></div>
+<!-- muốn sử dụng JSX ta thêm babel vô và type='text/javascript' đổi thành type='text/babel'-->
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type='text/babel'>
+  const root3Element = document.getElementById('root-3');
+  // Thay vì sử dụng react render, ta sử dụng JSX
+  const jsxElement1 = <div className='container'>Hello World by JSX</div>
+  // Ta nên để contentText của div thành 1 biến riêng sau đó sử dụng JS expression để hiển thị
+  const contentText = 'Hello World by JSX';
+  const jsxEleClassName = 'container';
+  let jsxElement2 = <div className={jsxEleClassName}>{contentText}</div>  // như này
+  jsxElement2 = <div className={jsxEleClassName}>{(() => contentText)()}</div> // hoặc dùng arrow function như này --> làm màu quá
+  jsxElement2 = <div className={jsxEleClassName + '___abc'}>{contentText}</div> // có thể thêm text đằng sau những biến được định nghĩa
+  //  cách nữa là đưa cả className và contentText vào trong object props đã nói bên trên
+  const props = {
+    className: 'container',
+    children: ['Hello Worrld by JSX', 'demo demo']
+  }
+  jsxElement2 = <div {...props} /> // sử dụng destructuring để trải props ra thành các thuộc tính của thẻ div
+
+  // ReactDOM sẽ render từ trên xuống dưới, từ trái qua phải
+  // Nên nếu giả sử có một className đằng trước props thì nó sẽ bị className của props ghi đè lên
+  jsxElement2 = <div className='className_demo' {...props} /> // className cuối cùng sẽ là className của props
+  // nhưng nếu
+  jsxElement2 = <div {...props} className='className_demo' /> // className cuối cùng sẽ là className_demo
+  // tương tự với children
+  jsxElement2 = <div {...props}>AAAAAAAAAAA</div> // children cuối cùng là AAAAAAAA chứ không phải mảng của props.children
+
+  ReactDOM.render(jsxElement2, root3Element);
+</script>

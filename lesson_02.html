@@ -1,0 +1,72 @@
+<!-- REACT JS COMPONENT -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<div id='root-1'></div>
+
+<script type='text/babel'>
+  const rootElement = document.getElementById('root-1');
+  const element = (
+    <div className='container'>
+      <div>Hello World</div>
+      <div>Hello World</div>
+    </div>
+  );
+  ReactDOM.render(element, rootElement);
+</script>
+
+
+
+<div id='root-2'></div>
+<script type='text/babel'>
+  // nếu muốn có nhiều thẻ div bên trong class container thì ta phải copy/paste nhiều lần,
+  // vì vậy ta nghĩ cách viết thẻ div rồi truyền tham số vô
+  const rootElement2 = document.getElementById('root-2');
+  const message2 = props => <div>{props.msg}</div>;
+  const element2 = (
+    <div className='container'>
+      {message2({ msg: 'Hello World' })}
+      {message2({ msg: 'Goodbye World' })}
+    </div>
+  );
+  ReactDOM.render(element2, rootElement2);
+</script>
+
+
+
+<div id='root-3'></div>
+<script type='text/babel'>
+  //  viết theo kiểu React.createElement
+  // như ta đã biết, hàm React.createElement có các tham số sau:
+  // React.createElement(/thẻ muốn tạo/, /props truyền vào thẻ muốn tạo/, .../nội dung bên trong/)
+  // ví dụ React.createElement('div', { className: 'container', children: ['Hello World by Reactjs', 'ABCXYZ'] });
+  // giờ ta sẽ viết cho message
+  const rootElement3 = document.getElementById('root-3');
+  const message3 = props => <div>{props.msg}</div>;
+  const element3 = (
+    <div className='container'>
+      {message3({ msg: 'Hello World' })}
+      {React.createElement(message3, { msg: 'DEMO DEMO' })}
+    </div>
+  );
+  ReactDOM.render(element3, rootElement3);
+</script>
+
+
+
+<div id='root-4'></div>
+<script type='text/babel'>
+  // Bản chất của React.createElement là tạo ra một element-một thẻ
+  // Nên cách làm trên là create ra một thẻ div có message được truyền vào là hơi thừa
+  // vì bản chất hàm message đã trả ra một thẻ rồi, tra chỉ cần dùng trực tiếp thẻ đó mà không cần dùng React.createElement
+  // và babel sẽ hỗ trợ việc này với cú pháp sau (chú ý hàm message giờ phải viết hoa là Message)
+  const rootElement4 = document.getElementById('root-4');
+  const Message4 = props => <div>{props.msg}</div>;
+  const element4 = (
+    <div className='container'>
+      <Message4 msg='MSG44444444444' />
+    </div>
+  );
+  ReactDOM.render(element4, rootElement4);
+</script>
